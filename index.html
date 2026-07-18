@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SMART Hardware Home in Rawang - tools, plumbing, electrical products and everyday hardware.">
+  <title>SMART Hardware Home | Rawang Hardware Store</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="SMART Hardware Home homepage">
+      <img class="brand-logo" src="assets/smart-logo.png" alt="SMART Hardware Home logo">
+      <span class="brand-text"><strong>SMART Hardware Home</strong><small data-i18n="brand_area">Rawang, Selangor</small></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open navigation menu"><span></span><span></span><span></span></button>
+    <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+      <a href="#products"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.7 6.3 17 4l3 3-2.3 2.3"/><path d="m14 7 3 3"/><path d="M5 19l8.5-8.5"/><path d="M4 20l-1-1 3-3 1 1-3 3Z"/></svg></span><span data-i18n="nav_products">Products</span></a>
+      <a href="#gallery"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg></span><span data-i18n="nav_gallery">Gallery</span></a>
+      <a href="#notice"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 10v4h4l9 4V6l-9 4H4Z"/><path d="M19 9c1 1 1 5 0 6"/></svg></span><span data-i18n="nav_updates">Updates</span></a>
+      <a href="#forum"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H8l-3 3V5Z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></span><span data-i18n="nav_forum">Forum</span></a>
+      <a href="#contact"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 5h4l1 4-2 1c1 2 2 3 4 4l1-2 4 1v4c0 1-1 2-2 2C10 19 5 14 5 7c0-1 1-2 2-2Z"/></svg></span><span data-i18n="nav_contact">Contact</span></a>
+    </nav>
+    <div class="header-contact">
+      <a id="header-phone-link" href="tel:+60189492887">018-949 2887</a>
+      <a class="header-whatsapp" href="https://wa.me/60189492887" target="_blank" rel="noopener" aria-label="WhatsApp SMART Hardware Home"><img src="assets/whatsapp-icon.png" alt=""></a>
+    </div>
+    <div class="language-switcher" aria-label="Language selector">
+      <button type="button" class="active" data-lang="en">EN</button>
+      <button type="button" data-lang="bm">BM</button>
+      <button type="button" data-lang="cn">CN</button>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero" aria-label="SMART Hardware Home storefront">
+      <img src="assets/smart-shopfront-hero.jpg" alt="SMART Hardware Home shopfront in Rawang">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <p class="eyebrow" data-i18n="hero_eyebrow">Your one-stop hardware store</p>
+        <h1 data-i18n="hero_title">Hardware and industrial supply</h1>
+        <p class="hero-copy" data-i18n="hero_copy">Tools, plumbing, electrical items and hardware accessories with ready stock and friendly local help in Rawang.</p>
+        <div class="hero-feature-row" aria-label="Store advantages">
+          <span data-i18n="hero_feature_quality">Quality products</span>
+          <span data-i18n="hero_feature_stock">Ready stock</span>
+          <span data-i18n="hero_feature_price">Competitive price</span>
+          <span data-i18n="hero_feature_help">Expert advice</span>
+        </div>
+        <div class="hero-actions">
+          <a class="button primary" href="#products" data-i18n="hero_products">Browse products</a>
+          <a class="button secondary" href="https://wa.me/60189492887" target="_blank" rel="noopener" data-i18n="hero_whatsapp">Ask on WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="mobile-quick-nav" aria-label="Mobile quick links">
+      <a href="#products"><span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.7 6.3 17 4l3 3-2.3 2.3"/><path d="m14 7 3 3"/><path d="M5 19l8.5-8.5"/></svg></span><span data-i18n="quick_products">Find products</span></a>
+      <a href="#gallery"><span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg></span><span data-i18n="nav_gallery">Gallery</span></a>
+      <a href="https://wa.me/60189492887" target="_blank" rel="noopener"><span class="quick-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 5h4l1 4-2 1c1 2 2 3 4 4l1-2 4 1v4c0 1-1 2-2 2C10 19 5 14 5 7c0-1 1-2 2-2Z"/></svg></span><span>WhatsApp</span></a>
+    </nav>
+
+    <section class="quick-info" aria-label="Store highlights">
+      <div><span class="info-label" data-i18n="info_location">Location</span><strong id="store-area">Rawang, Selangor</strong></div>
+      <div><span class="info-label" data-i18n="info_stock_label">What we stock</span><strong data-i18n="info_stock">Tools, fittings and hardware</strong></div>
+      <div><span class="info-label" data-i18n="info_help_label">Need help?</span><strong data-i18n="info_help">Send us a product photo</strong></div>
+    </section>
+
+    <section class="home-category-strip" aria-label="Popular product categories">
+      <a href="#products" data-category-shortcut="Tools"><img src="assets/gallery/tools-electric-drills.jpg" alt=""><strong data-i18n="category_card_tools">Power tools</strong><span data-i18n="category_card_view">View products</span></a>
+      <a href="#products" data-category-shortcut="Electrical"><img src="assets/gallery/electrical-welding-machines.jpg" alt=""><strong data-i18n="category_card_welding">Welding</strong><span data-i18n="category_card_view">View products</span></a>
+      <a href="#products" data-category-shortcut="Tools"><img src="assets/gallery/tools-trowels-scrapers.jpg" alt=""><strong data-i18n="category_card_safety">Hand tools</strong><span data-i18n="category_card_view">View products</span></a>
+      <a href="#products" data-category-shortcut="Electrical"><img src="assets/gallery/electrical-instant-water-heater.jpg" alt=""><strong data-i18n="category_card_electrical">Electrical</strong><span data-i18n="category_card_view">View products</span></a>
+      <a href="#products" data-category-shortcut="Plumbing"><img src="assets/gallery/plumbing-repair-parts.jpg" alt=""><strong data-i18n="category_card_plumbing">Plumbing</strong><span data-i18n="category_card_view">View products</span></a>
+      <a href="#products" data-category-shortcut="Hardware Accessories"><img src="assets/gallery/hardware-tape-rolls.jpg" alt=""><strong data-i18n="category_card_hardware">Hardware</strong><span data-i18n="category_card_view">View products</span></a>
+    </section>
+
+    <section class="home-promo-grid" aria-label="Store promotions">
+      <article class="promo-card promo-power">
+        <div>
+          <p class="eyebrow" data-i18n="promo_power_eyebrow">Power up your work</p>
+          <h2 data-i18n="promo_power_title">High performance tools ready in store</h2>
+          <a class="button primary" href="#products" data-i18n="promo_shop">Shop now</a>
+        </div>
+        <img src="assets/gallery/tools-rotary-hammer.jpg" alt="">
+      </article>
+      <article class="promo-card promo-trust">
+        <div>
+          <p class="eyebrow" data-i18n="promo_trust_eyebrow">Quality you can trust</p>
+          <h2 data-i18n="promo_trust_title">Trusted brands and practical hardware choices</h2>
+          <a class="button secondary" href="#contact" data-i18n="promo_contact">Contact us</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="why-choose" aria-label="Why choose SMART Hardware Home">
+      <div class="compact-heading">
+        <p class="eyebrow" data-i18n="why_eyebrow">Why choose</p>
+        <h2 data-i18n="why_title">SMART Hardware Home?</h2>
+      </div>
+      <div class="why-grid">
+        <article><span aria-hidden="true">01</span><strong data-i18n="why_selection">Wide selection</strong><p data-i18n="why_selection_copy">Thousands of products for daily repair work.</p></article>
+        <article><span aria-hidden="true">02</span><strong data-i18n="why_stock">Ready stock</strong><p data-i18n="why_stock_copy">Most items available in store.</p></article>
+        <article><span aria-hidden="true">03</span><strong data-i18n="why_price">Competitive price</strong><p data-i18n="why_price_copy">Fair value for your project.</p></article>
+        <article><span aria-hidden="true">04</span><strong data-i18n="why_support">Helpful support</strong><p data-i18n="why_support_copy">Ask before you buy.</p></article>
+      </div>
+    </section>
+
+    <section class="store-preview" aria-label="Visit our store">
+      <div class="compact-heading">
+        <p class="eyebrow" data-i18n="visit_eyebrow">Visit our store</p>
+        <h2 data-i18n="visit_title">Browse more items in person</h2>
+      </div>
+      <div class="store-preview-grid">
+        <img src="assets/gallery/tools-power-tool-shelf.jpg" alt="Power tool shelf at SMART Hardware Home">
+        <img src="assets/gallery/tools-hand-tool-wall.jpg" alt="Hand tools at SMART Hardware Home">
+        <img src="assets/gallery/plumbing-float-valves.jpg" alt="Plumbing parts at SMART Hardware Home">
+        <img src="assets/smart-shopfront-reference.jpg" alt="SMART Hardware Home shopfront">
+        <a class="store-preview-action" href="#gallery" data-i18n="visit_more">View more photos</a>
+      </div>
+    </section>
+
+    <section class="section" id="products">
+      <div class="section-heading">
+        <div><p class="eyebrow" data-i18n="products_eyebrow">Products</p><h2 data-i18n="products_title">Find what you need</h2></div>
+        <div class="product-tools">
+          <label class="search-field" for="product-search">
+            <span class="visually-hidden" data-i18n="search_label">Search products</span>
+            <input type="search" id="product-search" placeholder="Search products or categories..." data-i18n-placeholder="search_placeholder" autocomplete="off">
+          </label>
+          <div class="filter-bar" id="category-filters" aria-label="Product category filters"></div>
+        </div>
+      </div>
+      <div class="product-grid" id="product-grid"></div>
+    </section>
+
+    <section class="gallery-band" id="gallery">
+      <div class="section-heading"><div><p class="eyebrow" data-i18n="gallery_eyebrow">In store</p><h2 data-i18n="gallery_title">Photo gallery</h2></div></div>
+      <div class="gallery-mode-tabs" aria-label="Choose gallery type"><button type="button" class="active" data-gallery-mode="events" data-i18n="gallery_events">Shop events</button><button type="button" data-gallery-mode="products" data-i18n="gallery_products">Product photos</button></div>
+      <div class="gallery-filter-panel" aria-label="Gallery category filter"><div><strong data-i18n="gallery_choose">Choose a category</strong><span data-i18n="gallery_choose_help">Select one, several, or show all</span></div><div class="gallery-filter-bar" id="gallery-category-filters"></div></div>
+      <div class="gallery-groups" id="product-gallery"></div>
+    </section>
+
+    <section class="notice-band" id="notice">
+      <div class="section-heading"><div><p class="eyebrow" data-i18n="updates_eyebrow">Latest</p><h2 data-i18n="updates_title">Store updates</h2></div><a class="text-link" href="#contact" data-i18n="updates_link">Ask about stock</a></div>
+      <div class="notice-list" id="notice-list"></div>
+    </section>
+
+    <section class="section two-column" id="forum">
+      <div><p class="eyebrow" data-i18n="forum_eyebrow">Customer forum</p><h2 data-i18n="forum_title">Ask the store</h2><p class="section-copy" data-i18n="forum_copy">Leave a question about products, price, stock or sizes. Messages stay on this device; use WhatsApp when you need a quick reply.</p></div>
+      <div class="forum-panel"><form class="comment-form" id="comment-form"><label><span data-i18n="form_name">Name</span><input type="text" id="comment-name" name="name" maxlength="40" placeholder="Your name" data-i18n-placeholder="form_name_placeholder" required></label><label><span data-i18n="form_message">Message</span><textarea id="comment-message" name="message" rows="4" maxlength="280" placeholder="What are you looking for?" data-i18n-placeholder="form_message_placeholder" required></textarea></label><button class="button primary" type="submit" data-i18n="form_post">Post message</button></form><div class="comments" id="comments" aria-live="polite"></div></div>
+    </section>
+
+    <section class="contact-band" id="contact">
+      <div><p class="eyebrow" data-i18n="contact_eyebrow">Visit or contact us</p><h2 data-i18n="contact_title">We're here to help.</h2><p id="store-description" data-i18n="contact_copy">Visit SMART Hardware Home in Rawang or contact us before your trip to check stock.</p></div>
+      <div class="contact-list" id="contact-list"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>Copyright <span id="year"></span> SMART Hardware Home</span><span>Rawang, Selangor</span></footer>
+  <div class="media-lightbox" id="media-lightbox" hidden><div class="media-lightbox-panel" role="dialog" aria-modal="true" aria-label="Product media viewer"><button class="lightbox-close" type="button" id="lightbox-close" aria-label="Close media viewer">x</button><button class="lightbox-nav prev" type="button" id="lightbox-prev" aria-label="Previous media">&lt;</button><div class="lightbox-media" id="lightbox-media"></div><button class="lightbox-nav next" type="button" id="lightbox-next" aria-label="Next media">&gt;</button><div class="lightbox-caption" id="lightbox-caption"></div></div></div>
+  <script src="site-data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
