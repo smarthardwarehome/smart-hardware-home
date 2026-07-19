@@ -15,7 +15,7 @@ window.SMART_HW_DATA = {
       {
         "label": "WhatsApp",
         "value": "018-949 2887",
-        "href": "http://Wasap.my/60189492887"
+        "href": "https://wa.me/60189492887"
       },
       {
         "label": "Email",
@@ -32,136 +32,44 @@ window.SMART_HW_DATA = {
       },
       {
         "label": "Business hours",
-        "value": "Monday: 9:00am - 8:30pm | Tuesday: 9:00am - 8:30pm | Wednesday: 9:00am - 8:30pm | Thursday: 9:00am - 8:30pm | Friday: 9:00am - 8:30pm | Saturday: 9:00am - 8:30pm | Sunday: 9:00am - 8:30pm"
+        "value": "Contact us for today's hours"
       }
-    ],
-    "businessHours": {
-      "mon": {
-        "open": true,
-        "start": "09:00",
-        "end": "20:30"
-      },
-      "tue": {
-        "open": true,
-        "start": "09:00",
-        "end": "20:30"
-      },
-      "wed": {
-        "open": true,
-        "start": "09:00",
-        "end": "20:30"
-      },
-      "thu": {
-        "open": true,
-        "start": "09:00",
-        "end": "20:30"
-      },
-      "fri": {
-        "open": true,
-        "start": "09:00",
-        "end": "20:30"
-      },
-      "sat": {
-        "open": true,
-        "start": "09:00",
-        "end": "20:30"
-      },
-      "sun": {
-        "open": true,
-        "start": "09:00",
-        "end": "20:30"
-      }
-    }
+    ]
   },
   "categories": [
     "All",
     "Tools",
     "Plumbing",
     "Electrical",
-    "Hardware Accessories",
-    "工具"
+    "Hardware Accessories"
   ],
   "products": [
-    {
-      "name": "Cleaning Spray Bottles",
-      "category": "Hardware Accessories",
-      "description": "Multi-purpose spray cleaners for workshop and household maintenance.",
-      "status": "In Store",
-      "tag": "Cleaning",
-      "icon": "🧴",
-      "image": "assets/gallery/hardware-cleaning-spray.jpg"
-    },
     {
       "name": "Rotary Hammer Drill",
       "category": "Tools",
       "description": "Heavy-duty rotary hammer for drilling and renovation work.",
       "status": "In Store",
       "tag": "Power Tool",
-      "icon": "🔨",
-      "image": "assets/gallery/tools-rotary-hammer.jpg"
+      "image": "assets/gallery/tools-rotary-hammer.jpg",
+      "icon": "HW"
     },
     {
       "name": "Electric Mixing Drill",
       "category": "Tools",
-      "description": "Electric mixer for paint, mortar and other building materials.",
+      "description": "Electric mixer for paint, mortar and building materials.",
       "status": "In Store",
       "tag": "Power Tool",
-      "icon": "🛠️",
-      "image": "assets/gallery/tools-electric-mixer.jpg"
-    },
-    {
-      "name": "Float Valves and Brass Rods",
-      "category": "Plumbing",
-      "description": "Float valve parts and brass rods for water tank installations.",
-      "status": "Ask for Size",
-      "tag": "Water Tank",
-      "icon": "🚰",
-      "image": "assets/gallery/plumbing-float-valves.jpg"
-    },
-    {
-      "name": "Plumbing Repair Parts",
-      "category": "Plumbing",
-      "description": "Assorted packaged plumbing parts for repair and replacement.",
-      "status": "In Store",
-      "tag": "Fittings",
-      "icon": "🚰",
-      "image": "assets/gallery/plumbing-repair-parts.jpg"
+      "image": "assets/gallery/tools-electric-mixer.jpg",
+      "icon": "HW"
     },
     {
       "name": "Trowels and Scrapers",
       "category": "Tools",
-      "description": "Assorted trowels, scrapers and finishing tools for building work.",
+      "description": "Assorted finishing tools for building and repair work.",
       "status": "Many Choices",
       "tag": "Hand Tools",
-      "icon": "🧰",
-      "image": "assets/gallery/tools-trowels-scrapers.jpg"
-    },
-    {
-      "name": "Utility Rope Rolls",
-      "category": "Hardware Accessories",
-      "description": "Utility rope and cord supplied in convenient rolls.",
-      "status": "Ask for Size",
-      "tag": "Rope",
-      "icon": "🪢",
-      "image": "assets/gallery/hardware-utility-rope.jpg"
-    },
-    {
-      "name": "Clear Flexible Hose",
-      "category": "Plumbing",
-      "description": "Clear flexible hose for water transfer and general use.",
-      "status": "Ask for Size",
-      "tag": "Hose",
-      "icon": "🚰",
-      "image": "assets/gallery/plumbing-clear-hose.jpg"
-    },
-    {
-      "name": "Orange Flexible Hose",
-      "category": "Plumbing",
-      "description": "Durable flexible hose available in multiple coil sizes.",
-      "status": "Ask for Size",
-      "tag": "Hose",
-      "icon": "🚰",
-      "image": "assets/gallery/plumbing-orange-hose.jpg"
+      "image": "assets/gallery/tools-trowels-scrapers.jpg",
+      "icon": "HW"
     },
     {
       "name": "Pressure Sprayers",
@@ -169,8 +77,58 @@ window.SMART_HW_DATA = {
       "description": "Portable pressure sprayers for garden and maintenance work.",
       "status": "In Store",
       "tag": "Garden Tool",
-      "icon": "🛠️",
-      "image": "assets/gallery/tools-pressure-sprayers.jpg"
+      "image": "assets/gallery/tools-pressure-sprayers.jpg",
+      "icon": "HW"
+    },
+    {
+      "name": "Angle Grinders",
+      "category": "Tools",
+      "description": "Electric grinders for cutting and surface preparation.",
+      "status": "Many Choices",
+      "tag": "Power Tools",
+      "image": "assets/gallery/tools-angle-grinders.jpg",
+      "icon": "HW"
+    },
+    {
+      "name": "Electric Drills",
+      "category": "Tools",
+      "description": "Corded and cordless drills for repair and installation.",
+      "status": "Many Choices",
+      "tag": "Power Tools",
+      "image": "assets/gallery/tools-electric-drills.jpg",
+      "icon": "HW"
+    },
+    {
+      "name": "Float Valves and Brass Rods",
+      "category": "Plumbing",
+      "description": "Parts for water tank installations and repairs.",
+      "status": "Ask for Size",
+      "tag": "Water Tank",
+      "image": "assets/gallery/plumbing-float-valves.jpg",
+      "icon": "HW"
+    },
+    {
+      "name": "Plumbing Repair Parts",
+      "category": "Plumbing",
+      "status": "In Store",
+      "tag": "Fittings",
+      "description": "Assorted plumbing parts for repair and replacement.",
+      "icon": "HW",
+      "visible": true,
+      "images": [
+        "assets/gallery/plumbing-repair-parts.jpg"
+      ],
+      "media": [],
+      "image": "assets/gallery/plumbing-repair-parts.jpg"
+    },
+    {
+      "name": "Clear Flexible Hose",
+      "category": "Plumbing",
+      "description": "Flexible hose for water transfer and general use.",
+      "status": "Ask for Size",
+      "tag": "Hose",
+      "image": "assets/gallery/plumbing-clear-hose.jpg",
+      "icon": "HW"
     },
     {
       "name": "Industrial Fan",
@@ -178,70 +136,34 @@ window.SMART_HW_DATA = {
       "description": "High-airflow fan for workshops, shops and home use.",
       "status": "In Store",
       "tag": "Ventilation",
-      "icon": "🔌",
-      "image": "assets/gallery/electrical-industrial-fan.jpg"
-    },
-    {
-      "name": "Hand Tool Wall Display",
-      "category": "Tools",
-      "description": "Pliers, cutters and general hand tools available in store.",
-      "status": "Many Choices",
-      "tag": "Hand Tools",
-      "icon": "🧰",
-      "image": "assets/gallery/tools-hand-tool-wall.jpg"
+      "image": "assets/gallery/electrical-industrial-fan.jpg",
+      "icon": "HW"
     },
     {
       "name": "Wet and Dry Vacuum",
       "category": "Electrical",
-      "description": "Wet and dry vacuum cleaner for workshop and home cleaning.",
+      "description": "Workshop and home wet-and-dry vacuum cleaner.",
       "status": "In Store",
-      "tag": "Cleaning Equipment",
-      "icon": "🔌",
-      "image": "assets/gallery/electrical-wet-dry-vacuum.jpg"
-    },
-    {
-      "name": "Power Tool Shelf",
-      "category": "Tools",
-      "description": "Selection of power tools and accessories displayed in store.",
-      "status": "Many Choices",
-      "tag": "Power Tools",
-      "icon": "🛠️",
-      "image": "assets/gallery/tools-power-tool-shelf.jpg"
-    },
-    {
-      "name": "Angle Grinders",
-      "category": "Tools",
-      "description": "Electric angle grinders for cutting and surface preparation.",
-      "status": "Many Choices",
-      "tag": "Power Tools",
-      "icon": "🛠️",
-      "image": "assets/gallery/tools-angle-grinders.jpg"
-    },
-    {
-      "name": "Electric Drills",
-      "category": "Tools",
-      "description": "Corded and cordless drills for repair and installation work.",
-      "status": "Many Choices",
-      "tag": "Power Tools",
-      "icon": "🛠️",
-      "image": "assets/gallery/tools-electric-drills.jpg"
+      "tag": "Cleaning",
+      "image": "assets/gallery/electrical-wet-dry-vacuum.jpg",
+      "icon": "HW"
     },
     {
       "name": "Welding Machines",
       "category": "Electrical",
-      "description": "Compact welding machines for workshop and fabrication work.",
+      "description": "Compact welding machines for workshop fabrication.",
       "status": "Ask for Model",
       "tag": "Welding",
-      "icon": "⚡",
-      "image": "assets/gallery/electrical-welding-machines.jpg"
+      "image": "assets/gallery/electrical-welding-machines.jpg",
+      "icon": "HW"
     },
     {
       "name": "Inverter Water Pump",
       "category": "Electrical",
-      "status": "Ask for Model",
+      "status": "Ready",
       "tag": "Water Pump",
-      "description": "Compact instant water heater for bathroom installation.",
-      "icon": "⚡",
+      "description": "Compact instant heater for bathroom installation.",
+      "icon": "HW",
       "visible": true,
       "images": [
         "assets/gallery/electrical-instant-water-heater.jpg"
@@ -250,22 +172,31 @@ window.SMART_HW_DATA = {
       "image": "assets/gallery/electrical-instant-water-heater.jpg"
     },
     {
-      "name": "Adhesive and Tape Rolls",
+      "name": "Cleaning Spray Bottles",
       "category": "Hardware Accessories",
-      "description": "Assorted adhesive, sealing and utility tape rolls.",
-      "status": "Many Choices",
-      "tag": "Adhesives",
-      "icon": "🧰",
-      "image": "assets/gallery/hardware-tape-rolls.jpg"
+      "description": "Multi-purpose cleaners for workshop and household maintenance.",
+      "status": "In Store",
+      "tag": "Cleaning",
+      "image": "assets/gallery/hardware-cleaning-spray.jpg",
+      "icon": "HW"
     },
     {
-      "name": "胶水与密封材料",
-      "category": "工具",
-      "description": "硅胶、强力胶、防水胶带和填缝用品。",
-      "status": "新货可加",
-      "tag": "修补",
-      "icon": "🧰",
-      "visible": false
+      "name": "Utility Rope Rolls",
+      "category": "Hardware Accessories",
+      "description": "Utility rope and cord in convenient rolls.",
+      "status": "Ask for Size",
+      "tag": "Rope",
+      "image": "assets/gallery/hardware-utility-rope.jpg",
+      "icon": "HW"
+    },
+    {
+      "name": "Adhesive and Tape Rolls",
+      "category": "Hardware Accessories",
+      "description": "Assorted sealing and utility tape rolls.",
+      "status": "Many Choices",
+      "tag": "Adhesives",
+      "image": "assets/gallery/hardware-tape-rolls.jpg",
+      "icon": "HW"
     }
   ],
   "notices": [
