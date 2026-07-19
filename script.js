@@ -11,7 +11,6 @@
   const noticeList = $("#notice-list");
   const comments = $("#comments");
   const commentForm = $("#comment-form");
-  const commentStorageKey = "smartHardwareHomeComments";
   const productStorageKey = "smartHardwareHomeProducts";
   const noticeStorageKey = "smartHardwareHomeNotices";
   const storeStorageKey = "smartHardwareHomeStoreInfo";
@@ -97,12 +96,12 @@
       updates_link: "Ask about stock",
       forum_eyebrow: "Customer forum",
       forum_title: "Ask the store",
-      forum_copy: "Leave a question about products, price, stock or sizes. Messages stay on this device; use WhatsApp when you need a quick reply.",
+      forum_copy: "Leave a question about products, price, stock or sizes. Your email app will open so you can send it directly to the store.",
       form_name: "Name",
       form_name_placeholder: "Your name",
       form_message: "Message",
       form_message_placeholder: "What are you looking for?",
-      form_post: "Post message",
+      form_post: "Send email",
       contact_eyebrow: "Visit or contact us",
       contact_title: "We're here to help.",
       contact_copy: "Visit SMART Hardware Home in Rawang or contact us before your trip to check stock.",
@@ -209,12 +208,12 @@
       updates_link: "Tanya stok",
       forum_eyebrow: "Forum pelanggan",
       forum_title: "Tanya kedai",
-      forum_copy: "Tinggalkan soalan tentang produk, harga, stok atau saiz. Mesej disimpan pada peranti ini; guna WhatsApp untuk balasan cepat.",
+      forum_copy: "Tinggalkan soalan tentang produk, harga, stok atau saiz. Aplikasi e-mel anda akan dibuka supaya soalan dihantar terus kepada kedai.",
       form_name: "Nama",
       form_name_placeholder: "Nama anda",
       form_message: "Mesej",
       form_message_placeholder: "Apa yang anda cari?",
-      form_post: "Hantar mesej",
+      form_post: "Hantar e-mel",
       contact_eyebrow: "Lawat atau hubungi kami",
       contact_title: "Kami sedia membantu.",
       contact_copy: "Lawat SMART Hardware Home di Rawang atau hubungi kami sebelum datang untuk semak stok.",
@@ -321,12 +320,12 @@
       updates_link: "询问库存",
       forum_eyebrow: "顾客留言",
       forum_title: "向本店询问",
-      forum_copy: "可留言询问产品、价格、库存或尺寸。留言保存在这台设备；需要快速回复请使用 WhatsApp。",
+      forum_copy: "可填写产品、价格、库存或尺寸问题。提交后会打开电邮，让你直接发送给本店。",
       form_name: "姓名",
       form_name_placeholder: "你的名字",
       form_message: "留言",
       form_message_placeholder: "你正在找什么？",
-      form_post: "发布留言",
+      form_post: "发送电邮",
       contact_eyebrow: "到店或联络我们",
       contact_title: "我们乐意协助。",
       contact_copy: "欢迎到 Rawang 的 SMART Hardware Home，或出发前先联络我们确认库存。",
@@ -1159,21 +1158,9 @@
     renderNoticeImagePreview();
   }
 
-  function getSavedComments() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(commentStorageKey));
-      return Array.isArray(saved)
-        ? saved.filter((comment) => comment && isText(comment.name) && isText(comment.message) && isText(comment.date)).slice(0, 30)
-        : [];
-    } catch (error) {
-      return [];
-    }
-  }
-
   function renderComments() {
     if (!comments) return;
-    const mergedComments = [...getSavedComments(), ...data.comments];
-    comments.innerHTML = mergedComments.map((comment) => `
+    comments.innerHTML = data.comments.map((comment) => `
       <article class="comment-card">
         <div class="comment-top">
           <strong>${escapeHtml(comment.name)}</strong>
@@ -1184,6 +1171,14 @@
     `).join("");
   }
 
+  function getStoreEmail() {
+    const email = getContact(getStore(), "Email");
+    const hrefValue = String(email.href || "").replace(/^mailto:/i, "").split("?")[0];
+    return String(hrefValue || email.value || "support@infosmarthardwarehome.com")
+      .trim()
+      .replace(/[\r\n\s]/g, "");
+  }
+
   function setupCommentForm() {
     if (!commentForm) return;
     commentForm.addEventListener("submit", (event) => {
@@ -1192,17 +1187,16 @@
       const message = $("#comment-message").value.trim();
       if (!name || !message) return;
 
-      const saved = getSavedComments();
-      const today = new Intl.DateTimeFormat("zh-MY", {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-      }).format(new Date());
-
-      saved.unshift({ name, message, date: today });
-      localStorage.setItem(commentStorageKey, JSON.stringify(saved.slice(0, 30)));
-      commentForm.reset();
-      renderComments();
+      const subject = encodeURIComponent(`SMART Hardware Home enquiry from ${name}`);
+      const body = encodeURIComponent([
+        `Name: ${name}`,
+        "",
+        "Message:",
+        message,
+        "",
+        `Page: ${window.location.href}`
+      ].join("\n"));
+      window.location.href = `mailto:${getStoreEmail()}?subject=${subject}&body=${body}`;
     });
   }
 
@@ -1335,401 +1329,7 @@
   }
 
   function setupAdmin() {
-    const login = $("#admin-login");
-    const workspace = $("#admin-workspace");
-    const unlock = $("#admin-unlock");
-    const passcode = $("#admin-passcode");
-    const storeForm = $("#store-form");
-    const productForm = $("#product-form");
-    const productList = $("#admin-product-list");
-    const selectAllProducts = $("#select-all-products");
-    const deleteSelectedProducts = $("#delete-selected-products");
-    const resetProducts = $("#reset-products");
-    const cancelEdit = $("#cancel-edit");
-    const productImage = $("#product-image");
-    const removeProductImage = $("#remove-product-image");
-    const logout = $("#admin-logout");
-    const loginLink = $("#admin-login-link");
-    const noticeForm = $("#notice-form");
-    const noticeImage = $("#notice-image");
-    const noticeAdminList = $("#admin-notice-list");
-    const resetStoreInfo = $("#reset-store-info");
-    const exportSiteData = $("#export-site-data");
-    const copySiteData = $("#copy-site-data");
-    const exportSiteDataStatus = $("#export-site-data-status");
-    const adminNavItems = document.querySelectorAll("[data-admin-tab]");
-    const adminPanels = document.querySelectorAll("[data-admin-panel]");
-
-    if (!login || !workspace || !unlock || !productForm) return;
-
-    function activateAdminTab(tabName) {
-      const activeParentTab = tabName === "product-form"
-        ? "products"
-        : tabName === "news-form"
-          ? "news"
-          : tabName;
-      adminNavItems.forEach((item) => {
-        if (!item.classList.contains("admin-nav-item")) return;
-        item.classList.toggle("active", item.dataset.adminTab === activeParentTab);
-      });
-      adminPanels.forEach((panel) => {
-        panel.classList.toggle("active", panel.dataset.adminPanel === tabName);
-      });
-    }
-
-    function unlockAdmin() {
-      login.hidden = true;
-      workspace.hidden = false;
-      if (loginLink) loginLink.hidden = true;
-      if (logout) logout.hidden = false;
-      sessionStorage.setItem(adminSessionKey, "true");
-      activateAdminTab("dashboard");
-      renderAdminProducts();
-      renderAdminNotices();
-      renderAdminMetrics();
-      fillStoreForm();
-    }
-
-    loginLink?.addEventListener("click", () => {
-      login.scrollIntoView({ behavior: "smooth", block: "center" });
-      passcode.focus();
-    });
-
-    if (sessionStorage.getItem(adminSessionKey) === "true") {
-      unlockAdmin();
-    }
-
-    unlock.addEventListener("click", () => {
-      if (passcode.value.trim() === data.admin.passcode) {
-        unlockAdmin();
-        return;
-      }
-      passcode.value = "";
-      passcode.placeholder = "Incorrect passcode. Please try again.";
-    });
-
-    passcode.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        unlock.click();
-      }
-    });
-
-    logout?.addEventListener("click", () => {
-      sessionStorage.removeItem(adminSessionKey);
-      workspace.hidden = true;
-      login.hidden = false;
-      if (loginLink) loginLink.hidden = false;
-      logout.hidden = true;
-      passcode.value = "";
-      passcode.focus();
-    });
-
-    adminNavItems.forEach((item) => {
-      item.addEventListener("click", () => {
-        activateAdminTab(item.dataset.adminTab);
-        if (item.dataset.adminTab === "shop-info") fillStoreForm();
-      });
-    });
-
-    function buildSiteDataExportSource() {
-      const categoryNames = getProducts().map((product) => product.category).filter(Boolean);
-      const exportData = {
-        ...data,
-        store: getStore(),
-        categories: [...new Set([allCategory, ...data.categories.slice(1), ...categoryNames])],
-        products: getProducts(),
-        notices: getNotices()
-      };
-      return `window.SMART_HW_DATA = ${JSON.stringify(exportData, null, 2)};\n`;
-    }
-
-    function setExportStatus(message) {
-      if (exportSiteDataStatus) exportSiteDataStatus.textContent = message;
-    }
-
-    exportSiteData?.addEventListener("click", () => {
-      const source = buildSiteDataExportSource();
-      const downloadUrl = URL.createObjectURL(new Blob([source], { type: "text/javascript;charset=utf-8" }));
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.download = "site-data.js";
-      document.body.appendChild(link);
-      link.click();
-      window.setTimeout(() => {
-        link.remove();
-        URL.revokeObjectURL(downloadUrl);
-      }, 1000);
-      setExportStatus("Download requested. If the file does not appear, use Copy site-data.js content instead.");
-    });
-
-    copySiteData?.addEventListener("click", async () => {
-      const source = buildSiteDataExportSource();
-      try {
-        if (navigator.clipboard?.writeText) {
-          await navigator.clipboard.writeText(source);
-        } else {
-          const textArea = document.createElement("textarea");
-          textArea.value = source;
-          textArea.readOnly = true;
-          textArea.style.position = "fixed";
-          textArea.style.opacity = "0";
-          document.body.appendChild(textArea);
-          textArea.select();
-          const copied = document.execCommand("copy");
-          textArea.remove();
-          if (!copied) throw new Error("Copy command was rejected.");
-        }
-        setExportStatus("Copied. Open site-data.js on GitHub, edit it, replace all content, paste, and commit.");
-      } catch (error) {
-        setExportStatus("Copy was blocked by the browser. Open this page through an HTTP server and try again.");
-      }
-    });
-
-    storeForm?.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const store = buildStoreFromForm();
-      if (!store.name || !store.area) return;
-      saveStore(store);
-      renderStoreInfo();
-      fillStoreForm();
-      window.alert("Shop information saved.");
-    });
-
-    $("#bulk-hour-start")?.addEventListener("input", renderBusinessHourPreviews);
-    $("#bulk-hour-end")?.addEventListener("input", renderBusinessHourPreviews);
-    document.querySelectorAll("[data-hour-open]").forEach((checkbox) => {
-      checkbox.addEventListener("change", renderBusinessHourPreviews);
-    });
-
-    resetStoreInfo?.addEventListener("click", () => {
-      if (!window.confirm("Restore default shop information? Custom shop info on this browser will be removed.")) return;
-      localStorage.removeItem(storeStorageKey);
-      renderStoreInfo();
-      fillStoreForm();
-    });
-
-    productForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const product = {
-        name: $("#product-name").value.trim(),
-        category: $("#product-category").value.trim(),
-        status: $("#product-status").value.trim(),
-        tag: $("#product-tag").value.trim(),
-        description: $("#product-description").value.trim(),
-        icon: $("#product-icon").value.trim() || "*",
-        visible: $("#product-visible")?.checked !== false,
-        images: removeProductImage?.checked ? [] : selectedProductImages,
-        media: removeProductImage?.checked ? [] : selectedProductVideos.map((src) => ({ type: "video", src, alt: $("#product-name").value.trim() })),
-        image: removeProductImage?.checked ? "" : (selectedProductImages[0] || "")
-      };
-
-      if (!product.name || !product.category || !product.status || !product.tag || !product.description) return;
-
-      const products = getProducts();
-      if (editingProductIndex === null) {
-        products.unshift(product);
-      } else {
-        products[editingProductIndex] = product;
-      }
-      saveProducts(products);
-      clearProductForm();
-      currentCategory = product.category;
-      refreshProductViews();
-      activateAdminTab("products");
-    });
-
-    productImage?.addEventListener("change", async () => {
-      const files = Array.from(productImage.files || []);
-      if (!files.length) return;
-      try {
-        const imageFiles = files.filter((file) => file.type.startsWith("image/"));
-        const videoFiles = files.filter((file) => file.type.startsWith("video/"));
-        const resizedImages = await Promise.all(imageFiles.map((file) => resizeImage(file)));
-        const videos = await Promise.all(videoFiles.map((file) => new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        })));
-        selectedProductImages = [...selectedProductImages, ...resizedImages];
-        selectedProductVideos = [...selectedProductVideos, ...videos];
-        if (removeProductImage) removeProductImage.checked = false;
-        renderImagePreview();
-      } catch (error) {
-        selectedProductImages = [];
-        selectedProductVideos = [];
-        renderImagePreview();
-      }
-    });
-
-    removeProductImage?.addEventListener("change", () => {
-      if (removeProductImage.checked) {
-        selectedProductImages = [];
-        selectedProductVideos = [];
-        if (productImage) productImage.value = "";
-        renderImagePreview();
-      }
-    });
-
-    productList.addEventListener("click", (event) => {
-      const selectedCheckbox = event.target.closest("[data-select-product]");
-      const visibleCheckbox = event.target.closest("[data-toggle-product-visible]");
-      const editButton = event.target.closest("[data-edit-product]");
-      const deleteButton = event.target.closest("[data-delete-product]");
-
-      if (selectedCheckbox) {
-        updateProductBulkControls();
-        return;
-      }
-
-      if (visibleCheckbox) {
-        const index = Number(visibleCheckbox.dataset.toggleProductVisible);
-        const products = getProducts();
-        if (!products[index]) return;
-        products[index] = { ...products[index], visible: visibleCheckbox.checked };
-        saveProducts(products);
-        refreshProductViews();
-        return;
-      }
-
-      if (editButton) {
-        const index = Number(editButton.dataset.editProduct);
-        const product = getProducts()[index];
-        if (!product) return;
-        fillProductForm(product);
-        setProductFormMode(index);
-        activateAdminTab("product-form");
-        renderAdminProducts();
-        return;
-      }
-
-      if (!deleteButton) return;
-      const index = Number(deleteButton.dataset.deleteProduct);
-      const products = getProducts();
-      if (!window.confirm(`Delete "${products[index]?.name || "this product"}"?`)) return;
-      products.splice(index, 1);
-      saveProducts(products);
-      if (editingProductIndex === index) {
-        clearProductForm();
-      } else if (editingProductIndex !== null && index < editingProductIndex) {
-        editingProductIndex -= 1;
-      }
-      refreshProductViews();
-    });
-
-    selectAllProducts?.addEventListener("change", () => {
-      document.querySelectorAll("[data-select-product]").forEach((checkbox) => {
-        checkbox.checked = selectAllProducts.checked;
-      });
-      updateProductBulkControls();
-    });
-
-    deleteSelectedProducts?.addEventListener("click", () => {
-      const selectedIndexes = getSelectedProductIndexes().sort((a, b) => b - a);
-      if (!selectedIndexes.length) return;
-      const label = selectedIndexes.length === 1 ? "selected product" : "selected products";
-      if (!window.confirm(`Delete ${selectedIndexes.length} ${label}?`)) return;
-      const products = getProducts();
-      selectedIndexes.forEach((index) => {
-        if (products[index]) products.splice(index, 1);
-      });
-      saveProducts(products);
-      clearProductForm();
-      refreshProductViews();
-    });
-
-    cancelEdit.addEventListener("click", () => {
-      clearProductForm();
-      renderAdminProducts();
-    });
-
-    resetProducts.addEventListener("click", () => {
-      if (!window.confirm("Restore default products? Custom product changes on this browser will be removed.")) return;
-      localStorage.removeItem(productStorageKey);
-      currentCategory = allCategory;
-      clearProductForm();
-      refreshProductViews();
-    });
-
-    noticeImage?.addEventListener("change", async () => {
-      const file = noticeImage.files && noticeImage.files[0];
-      if (!file) return;
-      try {
-        selectedNoticeImage = await resizeImage(file, 1200, 0.82);
-        renderNoticeImagePreview();
-      } catch (error) {
-        selectedNoticeImage = "";
-        renderNoticeImagePreview();
-      }
-    });
-
-    noticeForm?.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const notice = {
-        date: $("#notice-date").value.trim(),
-        title: $("#notice-title").value.trim(),
-        body: $("#notice-body").value.trim(),
-        image: selectedNoticeImage
-      };
-      if (!notice.date || !notice.title || !notice.body) return;
-      const notices = getNotices();
-      if (editingNoticeIndex === null) notices.unshift(notice);
-      else notices[editingNoticeIndex] = notice;
-      saveNotices(notices);
-      clearNoticeForm();
-      renderNotices();
-      renderProductGallery();
-      renderAdminNotices();
-      renderAdminMetrics();
-      activateAdminTab("news");
-    });
-
-    noticeAdminList?.addEventListener("click", (event) => {
-      const editButton = event.target.closest("[data-edit-notice]");
-      const deleteButton = event.target.closest("[data-delete-notice]");
-      const notices = getNotices();
-      if (editButton) {
-        editingNoticeIndex = Number(editButton.dataset.editNotice);
-        const notice = notices[editingNoticeIndex];
-        if (!notice) return;
-        $("#notice-date").value = notice.date || "";
-        $("#notice-title").value = notice.title || "";
-        $("#notice-body").value = notice.body || "";
-        selectedNoticeImage = notice.image || "";
-        $("#save-notice").textContent = "Update Notice";
-        $("#cancel-notice-edit").hidden = false;
-        renderNoticeImagePreview();
-        activateAdminTab("news-form");
-        renderAdminNotices();
-        return;
-      }
-      if (!deleteButton) return;
-      const index = Number(deleteButton.dataset.deleteNotice);
-      if (!window.confirm(`Delete "${notices[index]?.title || "this update"}"?`)) return;
-      notices.splice(index, 1);
-      saveNotices(notices);
-      clearNoticeForm();
-      renderNotices();
-      renderProductGallery();
-      renderAdminNotices();
-      renderAdminMetrics();
-    });
-
-    $("#cancel-notice-edit")?.addEventListener("click", () => {
-      clearNoticeForm();
-      renderAdminNotices();
-    });
-
-    $("#reset-notices")?.addEventListener("click", () => {
-      if (!window.confirm("Restore default events and news? Custom updates on this browser will be removed.")) return;
-      localStorage.removeItem(noticeStorageKey);
-      clearNoticeForm();
-      renderNotices();
-      renderProductGallery();
-      renderAdminNotices();
-      renderAdminMetrics();
-    });
+    // Public deployment package does not include the admin page.
   }
 
   function renderStoreInfo() {

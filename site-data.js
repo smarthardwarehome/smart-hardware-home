@@ -1,5 +1,4 @@
 window.SMART_HW_DATA = {
-  admin: { passcode: "SMART2026" },
   store: {
     name: "SMART Hardware Home",
     area: "Rawang, Selangor",
@@ -38,7 +37,7 @@ window.SMART_HW_DATA = {
     { date: "Store updates", title: "New stock and offers", body: "Check this page for new arrivals, promotions and store announcements." }
   ],
   comments: [
-    { name: "Store team", date: "Pinned", message: "Ask us about products, sizes, stock or prices. For a quick reply, WhatsApp or call 018-949 2887." }
+    { name: "Store team", date: "Pinned", message: "Send your product question by email using the form above. For a quick reply, WhatsApp or call 018-949 2887." }
   ]
 };
 
