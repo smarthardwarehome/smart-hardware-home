@@ -17,6 +17,8 @@
   const storeStorageKey = "smartHardwareHomeStoreInfo";
   const adminSessionKey = "smartHardwareHomeAdmin";
   const langStorageKey = "smartHardwareHomeLanguage";
+  const deliCatalogueStorageKey = "smartHardwareHomeDeliCatalogueVersion";
+  const deliCatalogueVersion = "2026-05-04-r4";
   const allCategory = data.categories[0] || "All";
   let currentCategory = allCategory;
   let currentGalleryMode = "events";
@@ -124,6 +126,19 @@
       category_Plumbing: "Plumbing",
       category_Electrical: "Electrical",
       category_Hardware_Accessories: "Hardware Accessories",
+      category_Professional_Power_Tools: "Professional Power Tools",
+      category_Power_Tool_Kits: "Power Tool Kits",
+      category_Semi_Pro_Power_Tools: "Semi-Pro Power Tools",
+      category_Cordless_Screwdriver: "Cordless Screwdriver",
+      category_Air_Tools: "Air Tools",
+      category_Corded_Power_Tools: "Corded Power Tools",
+      category_Garden_Tools: "Garden Tools",
+      category_Water_Pumps: "Water Pumps",
+      category_Hand_Tools: "Hand Tools",
+      category_Insulated_Tools: "Insulated Tools",
+      category_Tool_Accessories: "Tool Accessories",
+      category_Safety_and_Security: "Safety & Security",
+      category_Stationery: "Stationery",
       contact_Phone: "Phone",
       contact_WhatsApp: "WhatsApp",
       contact_Email: "Email",
@@ -223,6 +238,19 @@
       category_Plumbing: "Paip",
       category_Electrical: "Elektrik",
       category_Hardware_Accessories: "Aksesori perkakasan",
+      category_Professional_Power_Tools: "Alat Kuasa Profesional",
+      category_Power_Tool_Kits: "Set Alat Kuasa",
+      category_Semi_Pro_Power_Tools: "Alat Kuasa Semi-Pro",
+      category_Cordless_Screwdriver: "Pemutar Skru Tanpa Wayar",
+      category_Air_Tools: "Alat Angin",
+      category_Corded_Power_Tools: "Alat Kuasa Berwayar",
+      category_Garden_Tools: "Alat Taman",
+      category_Water_Pumps: "Pam Air",
+      category_Hand_Tools: "Alat Tangan",
+      category_Insulated_Tools: "Alat Berpenebat",
+      category_Tool_Accessories: "Aksesori Alat",
+      category_Safety_and_Security: "Keselamatan & Sekuriti",
+      category_Stationery: "Alat Tulis",
       contact_Phone: "Telefon",
       contact_WhatsApp: "WhatsApp",
       contact_Email: "E-mel",
@@ -322,6 +350,19 @@
       category_Plumbing: "水喉",
       category_Electrical: "电器",
       category_Hardware_Accessories: "五金配件",
+      category_Professional_Power_Tools: "专业电动工具",
+      category_Power_Tool_Kits: "电动工具套装",
+      category_Semi_Pro_Power_Tools: "半专业电动工具",
+      category_Cordless_Screwdriver: "充电式螺丝刀",
+      category_Air_Tools: "气动工具",
+      category_Corded_Power_Tools: "有线电动工具",
+      category_Garden_Tools: "园艺工具",
+      category_Water_Pumps: "水泵",
+      category_Hand_Tools: "手工具",
+      category_Insulated_Tools: "绝缘工具",
+      category_Tool_Accessories: "工具配件",
+      category_Safety_and_Security: "安全与防护",
+      category_Stationery: "文具",
       contact_Phone: "电话",
       contact_WhatsApp: "WhatsApp",
       contact_Email: "电邮",
@@ -401,7 +442,41 @@
   function getProducts() {
     try {
       const saved = JSON.parse(localStorage.getItem(productStorageKey));
-      return Array.isArray(saved) && saved.every(isValidProduct) ? saved : data.products;
+      if (Array.isArray(saved) && saved.every(isValidProduct)) {
+        if (localStorage.getItem(deliCatalogueStorageKey) !== deliCatalogueVersion && Array.isArray(window.DELI_PRODUCTS)) {
+          const deliProductsByTag = new Map(window.DELI_PRODUCTS.map((product) => [product.tag, product]));
+          const savedTags = new Set(saved.map((product) => product.tag));
+          const missingDeliProducts = window.DELI_PRODUCTS.filter((product) => !savedTags.has(product.tag));
+          const migratedProducts = saved.map((product) => {
+            const catalogueProduct = deliProductsByTag.get(product.tag);
+            if (catalogueProduct && product.category === "USB & Type-C Tools") {
+              return { ...product, category: catalogueProduct.category };
+            }
+            if (product.tag === "Deli | DL8080" && product.category === "Cordless Screwdriver") {
+              return { ...product, category: "Electrical" };
+            }
+            if (product.name === "Instant Water Heater" && product.category === "Electrical") {
+              return {
+                ...product,
+                name: "Inverter Water Pump",
+                description: "Compact inverter-controlled water pump for steady household water pressure.",
+                tag: "Water Pump"
+              };
+            }
+            return product;
+          });
+          migratedProducts.push(...missingDeliProducts);
+          try {
+            localStorage.setItem(productStorageKey, JSON.stringify(migratedProducts));
+            localStorage.setItem(deliCatalogueStorageKey, deliCatalogueVersion);
+          } catch (error) {
+            // Return the merged catalogue even when browser storage has no remaining capacity.
+          }
+          return migratedProducts;
+        }
+        return saved;
+      }
+      return data.products;
     } catch (error) {
       return data.products;
     }
@@ -618,7 +693,7 @@
             ? `<button class="product-photo-wrap media-trigger" type="button" data-product-index="${productIndex}" data-media-index="0" aria-label="View ${escapeHtml(product.name)} media">
                 ${primaryMedia.type === "video"
                   ? `<video class="product-photo" src="${escapeHtml(primaryMedia.src)}" muted playsinline></video><span class="media-type-badge">Video</span>`
-                  : `<img class="product-photo" src="${escapeHtml(primaryMedia.src)}" alt="${escapeHtml(product.name)}">`
+                  : `<img class="product-photo" src="${escapeHtml(primaryMedia.src)}" alt="${escapeHtml(product.name)}" loading="lazy" decoding="async">`
                 }
                 <span class="media-open-hint">${escapeHtml(t("view_media"))}</span>
                 ${mediaCount > 1 ? `<span class="media-count-badge">${mediaCount} ${escapeHtml(t("media"))}</span>` : ""}
@@ -669,7 +744,7 @@
             ${items.map((item) => `
               <article class="gallery-item">
                 <button class="gallery-media-button media-trigger" type="button" data-event-index="${eventItems.indexOf(item)}" aria-label="View ${escapeHtml(item.title)} event photo">
-                  <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}">
+                  <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async">
                 </button>
                 <div>
                   <strong>${escapeHtml(item.title)}</strong>
@@ -710,7 +785,7 @@
               <button class="gallery-media-button media-trigger" type="button" data-product-index="${allProducts.indexOf(product)}" data-media-index="${index}" aria-label="View ${escapeHtml(product.name)} media ${index + 1}">
                 ${item.type === "video"
                   ? `<video src="${escapeHtml(item.src)}" muted playsinline></video><span class="media-type-badge">${escapeHtml(t("video"))}</span>`
-                  : `<img src="${escapeHtml(item.src)}" alt="${escapeHtml(product.name)} photo ${index + 1}">`
+                  : `<img src="${escapeHtml(item.src)}" alt="${escapeHtml(product.name)} photo ${index + 1}" loading="lazy" decoding="async">`
                 }
               </button>
               <div>
@@ -1153,7 +1228,7 @@
           ${getPrimaryProductMedia(product)
             ? getPrimaryProductMedia(product).type === "video"
               ? `<video class="admin-thumb" src="${escapeHtml(getPrimaryProductMedia(product).src)}" muted playsinline></video>`
-              : `<img class="admin-thumb" src="${escapeHtml(getPrimaryProductMedia(product).src)}" alt="${escapeHtml(product.name)}">`
+              : `<img class="admin-thumb" src="${escapeHtml(getPrimaryProductMedia(product).src)}" alt="${escapeHtml(product.name)}" loading="lazy" decoding="async">`
             : ""}
           <strong>${escapeHtml(product.name)}</strong>
           <span>${escapeHtml(product.category)}  ${escapeHtml(product.status)}  ${getProductMedia(product).length} media  ${isProductVisible(product) ? "Public" : "Hidden"}</span>
@@ -1260,7 +1335,401 @@
   }
 
   function setupAdmin() {
-    // Public deployment package does not include the admin page.
+    const login = $("#admin-login");
+    const workspace = $("#admin-workspace");
+    const unlock = $("#admin-unlock");
+    const passcode = $("#admin-passcode");
+    const storeForm = $("#store-form");
+    const productForm = $("#product-form");
+    const productList = $("#admin-product-list");
+    const selectAllProducts = $("#select-all-products");
+    const deleteSelectedProducts = $("#delete-selected-products");
+    const resetProducts = $("#reset-products");
+    const cancelEdit = $("#cancel-edit");
+    const productImage = $("#product-image");
+    const removeProductImage = $("#remove-product-image");
+    const logout = $("#admin-logout");
+    const loginLink = $("#admin-login-link");
+    const noticeForm = $("#notice-form");
+    const noticeImage = $("#notice-image");
+    const noticeAdminList = $("#admin-notice-list");
+    const resetStoreInfo = $("#reset-store-info");
+    const exportSiteData = $("#export-site-data");
+    const copySiteData = $("#copy-site-data");
+    const exportSiteDataStatus = $("#export-site-data-status");
+    const adminNavItems = document.querySelectorAll("[data-admin-tab]");
+    const adminPanels = document.querySelectorAll("[data-admin-panel]");
+
+    if (!login || !workspace || !unlock || !productForm) return;
+
+    function activateAdminTab(tabName) {
+      const activeParentTab = tabName === "product-form"
+        ? "products"
+        : tabName === "news-form"
+          ? "news"
+          : tabName;
+      adminNavItems.forEach((item) => {
+        if (!item.classList.contains("admin-nav-item")) return;
+        item.classList.toggle("active", item.dataset.adminTab === activeParentTab);
+      });
+      adminPanels.forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.adminPanel === tabName);
+      });
+    }
+
+    function unlockAdmin() {
+      login.hidden = true;
+      workspace.hidden = false;
+      if (loginLink) loginLink.hidden = true;
+      if (logout) logout.hidden = false;
+      sessionStorage.setItem(adminSessionKey, "true");
+      activateAdminTab("dashboard");
+      renderAdminProducts();
+      renderAdminNotices();
+      renderAdminMetrics();
+      fillStoreForm();
+    }
+
+    loginLink?.addEventListener("click", () => {
+      login.scrollIntoView({ behavior: "smooth", block: "center" });
+      passcode.focus();
+    });
+
+    if (sessionStorage.getItem(adminSessionKey) === "true") {
+      unlockAdmin();
+    }
+
+    unlock.addEventListener("click", () => {
+      if (passcode.value.trim() === data.admin.passcode) {
+        unlockAdmin();
+        return;
+      }
+      passcode.value = "";
+      passcode.placeholder = "Incorrect passcode. Please try again.";
+    });
+
+    passcode.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        unlock.click();
+      }
+    });
+
+    logout?.addEventListener("click", () => {
+      sessionStorage.removeItem(adminSessionKey);
+      workspace.hidden = true;
+      login.hidden = false;
+      if (loginLink) loginLink.hidden = false;
+      logout.hidden = true;
+      passcode.value = "";
+      passcode.focus();
+    });
+
+    adminNavItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        activateAdminTab(item.dataset.adminTab);
+        if (item.dataset.adminTab === "shop-info") fillStoreForm();
+      });
+    });
+
+    function buildSiteDataExportSource() {
+      const categoryNames = getProducts().map((product) => product.category).filter(Boolean);
+      const exportData = {
+        ...data,
+        store: getStore(),
+        categories: [...new Set([allCategory, ...data.categories.slice(1), ...categoryNames])],
+        products: getProducts(),
+        notices: getNotices()
+      };
+      return `window.SMART_HW_DATA = ${JSON.stringify(exportData, null, 2)};\n`;
+    }
+
+    function setExportStatus(message) {
+      if (exportSiteDataStatus) exportSiteDataStatus.textContent = message;
+    }
+
+    exportSiteData?.addEventListener("click", () => {
+      const source = buildSiteDataExportSource();
+      const downloadUrl = URL.createObjectURL(new Blob([source], { type: "text/javascript;charset=utf-8" }));
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = "site-data.js";
+      document.body.appendChild(link);
+      link.click();
+      window.setTimeout(() => {
+        link.remove();
+        URL.revokeObjectURL(downloadUrl);
+      }, 1000);
+      setExportStatus("Download requested. If the file does not appear, use Copy site-data.js content instead.");
+    });
+
+    copySiteData?.addEventListener("click", async () => {
+      const source = buildSiteDataExportSource();
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(source);
+        } else {
+          const textArea = document.createElement("textarea");
+          textArea.value = source;
+          textArea.readOnly = true;
+          textArea.style.position = "fixed";
+          textArea.style.opacity = "0";
+          document.body.appendChild(textArea);
+          textArea.select();
+          const copied = document.execCommand("copy");
+          textArea.remove();
+          if (!copied) throw new Error("Copy command was rejected.");
+        }
+        setExportStatus("Copied. Open site-data.js on GitHub, edit it, replace all content, paste, and commit.");
+      } catch (error) {
+        setExportStatus("Copy was blocked by the browser. Open this page through an HTTP server and try again.");
+      }
+    });
+
+    storeForm?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const store = buildStoreFromForm();
+      if (!store.name || !store.area) return;
+      saveStore(store);
+      renderStoreInfo();
+      fillStoreForm();
+      window.alert("Shop information saved.");
+    });
+
+    $("#bulk-hour-start")?.addEventListener("input", renderBusinessHourPreviews);
+    $("#bulk-hour-end")?.addEventListener("input", renderBusinessHourPreviews);
+    document.querySelectorAll("[data-hour-open]").forEach((checkbox) => {
+      checkbox.addEventListener("change", renderBusinessHourPreviews);
+    });
+
+    resetStoreInfo?.addEventListener("click", () => {
+      if (!window.confirm("Restore default shop information? Custom shop info on this browser will be removed.")) return;
+      localStorage.removeItem(storeStorageKey);
+      renderStoreInfo();
+      fillStoreForm();
+    });
+
+    productForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const product = {
+        name: $("#product-name").value.trim(),
+        category: $("#product-category").value.trim(),
+        status: $("#product-status").value.trim(),
+        tag: $("#product-tag").value.trim(),
+        description: $("#product-description").value.trim(),
+        icon: $("#product-icon").value.trim() || "*",
+        visible: $("#product-visible")?.checked !== false,
+        images: removeProductImage?.checked ? [] : selectedProductImages,
+        media: removeProductImage?.checked ? [] : selectedProductVideos.map((src) => ({ type: "video", src, alt: $("#product-name").value.trim() })),
+        image: removeProductImage?.checked ? "" : (selectedProductImages[0] || "")
+      };
+
+      if (!product.name || !product.category || !product.status || !product.tag || !product.description) return;
+
+      const products = getProducts();
+      if (editingProductIndex === null) {
+        products.unshift(product);
+      } else {
+        products[editingProductIndex] = product;
+      }
+      saveProducts(products);
+      clearProductForm();
+      currentCategory = product.category;
+      refreshProductViews();
+      activateAdminTab("products");
+    });
+
+    productImage?.addEventListener("change", async () => {
+      const files = Array.from(productImage.files || []);
+      if (!files.length) return;
+      try {
+        const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+        const videoFiles = files.filter((file) => file.type.startsWith("video/"));
+        const resizedImages = await Promise.all(imageFiles.map((file) => resizeImage(file)));
+        const videos = await Promise.all(videoFiles.map((file) => new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        })));
+        selectedProductImages = [...selectedProductImages, ...resizedImages];
+        selectedProductVideos = [...selectedProductVideos, ...videos];
+        if (removeProductImage) removeProductImage.checked = false;
+        renderImagePreview();
+      } catch (error) {
+        selectedProductImages = [];
+        selectedProductVideos = [];
+        renderImagePreview();
+      }
+    });
+
+    removeProductImage?.addEventListener("change", () => {
+      if (removeProductImage.checked) {
+        selectedProductImages = [];
+        selectedProductVideos = [];
+        if (productImage) productImage.value = "";
+        renderImagePreview();
+      }
+    });
+
+    productList.addEventListener("click", (event) => {
+      const selectedCheckbox = event.target.closest("[data-select-product]");
+      const visibleCheckbox = event.target.closest("[data-toggle-product-visible]");
+      const editButton = event.target.closest("[data-edit-product]");
+      const deleteButton = event.target.closest("[data-delete-product]");
+
+      if (selectedCheckbox) {
+        updateProductBulkControls();
+        return;
+      }
+
+      if (visibleCheckbox) {
+        const index = Number(visibleCheckbox.dataset.toggleProductVisible);
+        const products = getProducts();
+        if (!products[index]) return;
+        products[index] = { ...products[index], visible: visibleCheckbox.checked };
+        saveProducts(products);
+        refreshProductViews();
+        return;
+      }
+
+      if (editButton) {
+        const index = Number(editButton.dataset.editProduct);
+        const product = getProducts()[index];
+        if (!product) return;
+        fillProductForm(product);
+        setProductFormMode(index);
+        activateAdminTab("product-form");
+        renderAdminProducts();
+        return;
+      }
+
+      if (!deleteButton) return;
+      const index = Number(deleteButton.dataset.deleteProduct);
+      const products = getProducts();
+      if (!window.confirm(`Delete "${products[index]?.name || "this product"}"?`)) return;
+      products.splice(index, 1);
+      saveProducts(products);
+      if (editingProductIndex === index) {
+        clearProductForm();
+      } else if (editingProductIndex !== null && index < editingProductIndex) {
+        editingProductIndex -= 1;
+      }
+      refreshProductViews();
+    });
+
+    selectAllProducts?.addEventListener("change", () => {
+      document.querySelectorAll("[data-select-product]").forEach((checkbox) => {
+        checkbox.checked = selectAllProducts.checked;
+      });
+      updateProductBulkControls();
+    });
+
+    deleteSelectedProducts?.addEventListener("click", () => {
+      const selectedIndexes = getSelectedProductIndexes().sort((a, b) => b - a);
+      if (!selectedIndexes.length) return;
+      const label = selectedIndexes.length === 1 ? "selected product" : "selected products";
+      if (!window.confirm(`Delete ${selectedIndexes.length} ${label}?`)) return;
+      const products = getProducts();
+      selectedIndexes.forEach((index) => {
+        if (products[index]) products.splice(index, 1);
+      });
+      saveProducts(products);
+      clearProductForm();
+      refreshProductViews();
+    });
+
+    cancelEdit.addEventListener("click", () => {
+      clearProductForm();
+      renderAdminProducts();
+    });
+
+    resetProducts.addEventListener("click", () => {
+      if (!window.confirm("Restore default products? Custom product changes on this browser will be removed.")) return;
+      localStorage.removeItem(productStorageKey);
+      currentCategory = allCategory;
+      clearProductForm();
+      refreshProductViews();
+    });
+
+    noticeImage?.addEventListener("change", async () => {
+      const file = noticeImage.files && noticeImage.files[0];
+      if (!file) return;
+      try {
+        selectedNoticeImage = await resizeImage(file, 1200, 0.82);
+        renderNoticeImagePreview();
+      } catch (error) {
+        selectedNoticeImage = "";
+        renderNoticeImagePreview();
+      }
+    });
+
+    noticeForm?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const notice = {
+        date: $("#notice-date").value.trim(),
+        title: $("#notice-title").value.trim(),
+        body: $("#notice-body").value.trim(),
+        image: selectedNoticeImage
+      };
+      if (!notice.date || !notice.title || !notice.body) return;
+      const notices = getNotices();
+      if (editingNoticeIndex === null) notices.unshift(notice);
+      else notices[editingNoticeIndex] = notice;
+      saveNotices(notices);
+      clearNoticeForm();
+      renderNotices();
+      renderProductGallery();
+      renderAdminNotices();
+      renderAdminMetrics();
+      activateAdminTab("news");
+    });
+
+    noticeAdminList?.addEventListener("click", (event) => {
+      const editButton = event.target.closest("[data-edit-notice]");
+      const deleteButton = event.target.closest("[data-delete-notice]");
+      const notices = getNotices();
+      if (editButton) {
+        editingNoticeIndex = Number(editButton.dataset.editNotice);
+        const notice = notices[editingNoticeIndex];
+        if (!notice) return;
+        $("#notice-date").value = notice.date || "";
+        $("#notice-title").value = notice.title || "";
+        $("#notice-body").value = notice.body || "";
+        selectedNoticeImage = notice.image || "";
+        $("#save-notice").textContent = "Update Notice";
+        $("#cancel-notice-edit").hidden = false;
+        renderNoticeImagePreview();
+        activateAdminTab("news-form");
+        renderAdminNotices();
+        return;
+      }
+      if (!deleteButton) return;
+      const index = Number(deleteButton.dataset.deleteNotice);
+      if (!window.confirm(`Delete "${notices[index]?.title || "this update"}"?`)) return;
+      notices.splice(index, 1);
+      saveNotices(notices);
+      clearNoticeForm();
+      renderNotices();
+      renderProductGallery();
+      renderAdminNotices();
+      renderAdminMetrics();
+    });
+
+    $("#cancel-notice-edit")?.addEventListener("click", () => {
+      clearNoticeForm();
+      renderAdminNotices();
+    });
+
+    $("#reset-notices")?.addEventListener("click", () => {
+      if (!window.confirm("Restore default events and news? Custom updates on this browser will be removed.")) return;
+      localStorage.removeItem(noticeStorageKey);
+      clearNoticeForm();
+      renderNotices();
+      renderProductGallery();
+      renderAdminNotices();
+      renderAdminMetrics();
+    });
   }
 
   function renderStoreInfo() {
