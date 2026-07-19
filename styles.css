@@ -459,6 +459,102 @@ h3 {
   gap: 16px;
 }
 
+.product-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 22px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  box-shadow: var(--shadow-soft);
+}
+
+.product-pagination:empty {
+  display: none;
+}
+
+.pagination-status {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.page-size-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-size-control select {
+  min-height: 38px;
+  min-width: 86px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+}
+
+.page-number-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-weight: 900;
+}
+
+.page-number-control select {
+  min-height: 38px;
+  min-width: 70px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 900;
+  text-align: center;
+}
+
+.pagination-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pagination-buttons button {
+  min-height: 38px;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.pagination-buttons button:not(:disabled):hover,
+.pagination-buttons button:not(:disabled):focus-visible {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.pagination-buttons button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.pagination-buttons span {
+  min-width: 58px;
+  color: var(--muted);
+  font-weight: 900;
+  text-align: center;
+}
+
 .product-card,
 .notice-card,
 .comment-card {
@@ -678,6 +774,34 @@ h3 {
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.gallery-date-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.gallery-date-controls label {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.gallery-date-controls input,
+.gallery-date-controls select {
+  min-height: 42px;
+  min-width: 150px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
 }
 
 .gallery-filter-bar button {
@@ -1166,6 +1290,29 @@ h3 {
   gap: 10px;
 }
 
+.admin-publish-card {
+  margin-top: 22px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--soft);
+}
+
+.admin-publish-card h3 {
+  margin: 4px 0 8px;
+}
+
+.admin-publish-card p {
+  max-width: 760px;
+}
+
+.admin-export-status {
+  min-height: 1.4em;
+  margin: 10px 0 0;
+  color: var(--success);
+  font-weight: 700;
+}
+
 .admin-list {
   display: grid;
   gap: 10px;
@@ -1312,31 +1459,9 @@ h3 {
   text-underline-offset: 4px;
 }
 
-.two-column {
-  display: grid;
-  grid-template-columns: minmax(0, 0.82fr) minmax(320px, 1.18fr);
-  gap: clamp(28px, 6vw, 72px);
-  align-items: start;
-}
-
 .section-copy {
   max-width: 560px;
   color: var(--muted);
-}
-
-.forum-panel {
-  display: grid;
-  gap: 16px;
-}
-
-.comment-form {
-  display: grid;
-  gap: 14px;
-  padding: 20px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--white);
-  box-shadow: var(--shadow);
 }
 
 label {
@@ -1360,32 +1485,6 @@ textarea {
   resize: vertical;
 }
 
-.comments {
-  display: grid;
-  gap: 10px;
-}
-
-.comment-card {
-  padding: 16px;
-}
-
-.comment-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 6px;
-}
-
-.comment-top strong {
-  color: var(--ink);
-}
-
-.comment-top span {
-  color: var(--muted);
-  font-size: 0.82rem;
-}
-
-.comment-card p,
 .notice-card p,
 .product-card p,
 .contact-band p {
@@ -1604,6 +1703,10 @@ textarea {
     justify-content: flex-start;
   }
 
+  .gallery-date-controls {
+    justify-content: flex-start;
+  }
+
   .two-column,
   .contact-band,
   .admin-shell,
@@ -1718,6 +1821,16 @@ textarea {
     justify-items: stretch;
   }
 
+  .product-pagination {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .page-size-control,
+  .pagination-buttons {
+    justify-content: space-between;
+  }
+
   .site-footer {
     flex-direction: column;
   }
@@ -1829,6 +1942,8 @@ main { overflow: hidden; }
   h2 { font-size: clamp(2rem,10vw,2.7rem); }
   .filter-bar,.gallery-filter-bar,.gallery-mode-tabs { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
   .filter-bar button,.gallery-filter-bar button,.gallery-mode-tabs button { flex: 0 0 auto; }
+  .gallery-date-controls { display: grid; grid-template-columns: 1fr; }
+  .gallery-date-controls input,.gallery-date-controls select { width: 100%; min-width: 0; }
   .product-photo { aspect-ratio: 16/11; }
   .product-inquiry { min-height: 48px; }
 }

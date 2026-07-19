@@ -3,14 +3,16 @@
   const $ = (selector) => document.querySelector(selector);
 
   const productGrid = $("#product-grid");
+  const productPagination = $("#product-pagination");
   const filters = $("#category-filters");
   const galleryModeTabs = document.querySelectorAll("[data-gallery-mode]");
   const galleryFilterPanel = $(".gallery-filter-panel");
   const galleryFilters = $("#gallery-category-filters");
+  const galleryDateFrom = $("#gallery-date-from");
+  const galleryDateTo = $("#gallery-date-to");
+  const gallerySortOrder = $("#gallery-sort-order");
   const productGallery = $("#product-gallery");
   const noticeList = $("#notice-list");
-  const comments = $("#comments");
-  const commentForm = $("#comment-form");
   const productStorageKey = "smartHardwareHomeProducts";
   const noticeStorageKey = "smartHardwareHomeNotices";
   const storeStorageKey = "smartHardwareHomeStoreInfo";
@@ -23,6 +25,8 @@
   let currentGalleryMode = "events";
   let currentLang = localStorage.getItem(langStorageKey) || "en";
   let productSearchTerm = "";
+  let currentProductPage = 1;
+  let productPageSize = 20;
   let activeGalleryCategories = new Set();
   let editingProductIndex = null;
   let editingNoticeIndex = null;
@@ -38,7 +42,6 @@
       nav_products: "Products",
       nav_gallery: "Gallery",
       nav_updates: "Updates",
-      nav_forum: "Forum",
       nav_contact: "Contact",
       hero_eyebrow: "Your one-stop hardware store",
       hero_title: "Hardware and industrial supply",
@@ -88,31 +91,38 @@
       gallery_eyebrow: "In store",
       gallery_title: "Photo gallery",
       gallery_events: "Shop events",
-      gallery_products: "Product photos",
+      gallery_activities: "Shop Gallery",
+      gallery_products: "Shop Gallery",
       gallery_choose: "Choose a category",
       gallery_choose_help: "Select one, several, or show all",
+      gallery_date_range: "Shop Gallery date range",
+      gallery_date_range_help: "Choose a date range and sort shop gallery photos.",
+      gallery_from: "From",
+      gallery_to: "To",
+      gallery_sort: "Sort",
+      gallery_newest: "Newest first",
+      gallery_oldest: "Oldest first",
       updates_eyebrow: "Latest",
       updates_title: "Store updates",
       updates_link: "Ask about stock",
-      forum_eyebrow: "Customer forum",
-      forum_title: "Ask the store",
-      forum_copy: "Leave a question about products, price, stock or sizes. Your email app will open so you can send it directly to the store.",
-      form_name: "Name",
-      form_name_placeholder: "Your name",
-      form_message: "Message",
-      form_message_placeholder: "What are you looking for?",
-      form_post: "Send email",
       contact_eyebrow: "Visit or contact us",
       contact_title: "We're here to help.",
       contact_copy: "Visit SMART Hardware Home in Rawang or contact us before your trip to check stock.",
       empty_products_title: "No products found",
       empty_products_copy: "Try another search or category.",
+      products_per_page: "Items per page",
+      products_page_status: "Showing {start}-{end} of {total}",
+      products_page_number: "Page number",
+      products_prev: "Previous",
+      products_next: "Next",
       view_media: "View media",
       media: "media",
       ask_whatsapp: "Ask on WhatsApp",
       whatsapp_text: "Hi, I would like to ask about",
       no_event_title: "No shop event photos yet",
       no_event_copy: "Add an event or notice photo in the admin page, then it will appear here by date.",
+      no_activity_title: "No Shop Gallery photos in this range",
+      no_activity_copy: "Try another date range or add event photos in the admin page.",
       no_product_photo_title: "No product photos yet",
       no_product_photo_copy: "Upload product photos in the admin page and they will appear here.",
       event_count: "event photo sorted by latest date",
@@ -150,7 +160,6 @@
       nav_products: "Produk",
       nav_gallery: "Galeri",
       nav_updates: "Berita",
-      nav_forum: "Forum",
       nav_contact: "Hubungi",
       hero_eyebrow: "Kedai perkakasan sehenti anda",
       hero_title: "Bekalan perkakasan dan industri",
@@ -200,31 +209,38 @@
       gallery_eyebrow: "Dalam kedai",
       gallery_title: "Galeri foto",
       gallery_events: "Acara kedai",
-      gallery_products: "Foto produk",
+      gallery_activities: "Galeri Kedai",
+      gallery_products: "Galeri Kedai",
       gallery_choose: "Pilih kategori",
       gallery_choose_help: "Pilih satu, beberapa, atau papar semua",
+      gallery_date_range: "Julat tarikh aktiviti",
+      gallery_date_range_help: "Pilih julat tarikh dan susun foto aktiviti.",
+      gallery_from: "Dari",
+      gallery_to: "Hingga",
+      gallery_sort: "Susun",
+      gallery_newest: "Terkini dahulu",
+      gallery_oldest: "Terlama dahulu",
       updates_eyebrow: "Terkini",
       updates_title: "Berita kedai",
       updates_link: "Tanya stok",
-      forum_eyebrow: "Forum pelanggan",
-      forum_title: "Tanya kedai",
-      forum_copy: "Tinggalkan soalan tentang produk, harga, stok atau saiz. Aplikasi e-mel anda akan dibuka supaya soalan dihantar terus kepada kedai.",
-      form_name: "Nama",
-      form_name_placeholder: "Nama anda",
-      form_message: "Mesej",
-      form_message_placeholder: "Apa yang anda cari?",
-      form_post: "Hantar e-mel",
       contact_eyebrow: "Lawat atau hubungi kami",
       contact_title: "Kami sedia membantu.",
       contact_copy: "Lawat SMART Hardware Home di Rawang atau hubungi kami sebelum datang untuk semak stok.",
       empty_products_title: "Tiada produk dijumpai",
       empty_products_copy: "Cuba carian atau kategori lain.",
+      products_per_page: "Item setiap halaman",
+      products_page_status: "Memaparkan {start}-{end} daripada {total}",
+      products_page_number: "Nombor halaman",
+      products_prev: "Sebelumnya",
+      products_next: "Seterusnya",
       view_media: "Lihat media",
       media: "media",
       ask_whatsapp: "Tanya WhatsApp",
       whatsapp_text: "Hai, saya ingin bertanya tentang",
       no_event_title: "Belum ada foto acara kedai",
       no_event_copy: "Tambah foto acara atau berita di halaman admin, kemudian ia akan muncul mengikut tarikh.",
+      no_activity_title: "Tiada foto Galeri Kedai dalam julat ini",
+      no_activity_copy: "Cuba julat tarikh lain atau tambah foto acara di halaman admin.",
       no_product_photo_title: "Belum ada foto produk",
       no_product_photo_copy: "Muat naik foto produk di halaman admin dan ia akan muncul di sini.",
       event_count: "foto acara disusun ikut tarikh terkini",
@@ -262,7 +278,6 @@
       nav_products: "产品",
       nav_gallery: "图库",
       nav_updates: "公告",
-      nav_forum: "留言",
       nav_contact: "联络",
       hero_eyebrow: "本地五金店",
       hero_title: "各种工具与五金用品，一站式找齐。",
@@ -312,31 +327,38 @@
       gallery_eyebrow: "店内",
       gallery_title: "照片图库",
       gallery_events: "店铺活动",
-      gallery_products: "产品照片",
+      gallery_activities: "店铺图库",
+      gallery_products: "店铺图库",
       gallery_choose: "选择分类",
       gallery_choose_help: "可选择一个、多个，或显示全部",
+      gallery_date_range: "活动日期范围",
+      gallery_date_range_help: "选择日期范围并排序活动照片。",
+      gallery_from: "开始",
+      gallery_to: "结束",
+      gallery_sort: "排序",
+      gallery_newest: "最新在前",
+      gallery_oldest: "最旧在前",
       updates_eyebrow: "最新",
       updates_title: "店铺公告",
       updates_link: "询问库存",
-      forum_eyebrow: "顾客留言",
-      forum_title: "向本店询问",
-      forum_copy: "可填写产品、价格、库存或尺寸问题。提交后会打开电邮，让你直接发送给本店。",
-      form_name: "姓名",
-      form_name_placeholder: "你的名字",
-      form_message: "留言",
-      form_message_placeholder: "你正在找什么？",
-      form_post: "发送电邮",
       contact_eyebrow: "到店或联络我们",
       contact_title: "我们乐意协助。",
       contact_copy: "欢迎到 Rawang 的 SMART Hardware Home，或出发前先联络我们确认库存。",
       empty_products_title: "找不到相关产品",
       empty_products_copy: "请尝试其他关键词或分类。",
+      products_per_page: "每页显示",
+      products_page_status: "显示 {start}-{end} / 共 {total}",
+      products_page_number: "页码",
+      products_prev: "上一页",
+      products_next: "下一页",
       view_media: "查看媒体",
       media: "媒体",
       ask_whatsapp: "WhatsApp 询问",
       whatsapp_text: "您好，我想询问",
       no_event_title: "暂时没有店铺活动照片",
       no_event_copy: "店主可在 admin 页面添加活动或公告照片，之后会按日期显示在这里。",
+      no_activity_title: "这个日期范围没有店铺图库照片",
+      no_activity_copy: "请选择其他日期范围，或在 admin 页面添加活动照片。",
       no_product_photo_title: "暂时没有产品照片",
       no_product_photo_copy: "在 admin 页面上传产品照片后，这里会自动显示。",
       event_count: "张活动照片，按最新日期排序",
@@ -617,18 +639,8 @@
   }
 
   function renderGalleryFilters() {
-    if (!galleryFilters) return;
-    const categories = getGalleryCategories();
-    activeGalleryCategories.forEach((category) => {
-      if (!categories.includes(category)) activeGalleryCategories.delete(category);
-    });
-    const showingAll = activeGalleryCategories.size === 0;
-    galleryFilters.innerHTML = [
-      `<button type="button" class="${showingAll ? "active" : ""}" data-gallery-category="${escapeHtml(allCategory)}">${escapeHtml(categoryLabel(allCategory))}</button>`,
-      ...categories.map((category) => `
-        <button type="button" class="${activeGalleryCategories.has(category) ? "active" : ""}" data-gallery-category="${escapeHtml(category)}">${escapeHtml(categoryLabel(category))}</button>
-      `)
-    ].join("");
+    if (!galleryFilterPanel) return;
+    galleryFilterPanel.hidden = currentGalleryMode !== "activities";
   }
 
   function parseEventDate(value) {
@@ -643,18 +655,46 @@
     return Number.isNaN(timestamp) ? 0 : timestamp;
   }
 
-  function getEventGalleryItems() {
+  function getDateInputTimestamp(value, isEndDate = false) {
+    if (!value) return 0;
+    const timestamp = Date.parse(`${value}T${isEndDate ? "23:59:59" : "00:00:00"}`);
+    return Number.isNaN(timestamp) ? 0 : timestamp;
+  }
+
+  function getActivityDateFilters() {
+    return {
+      from: getDateInputTimestamp(galleryDateFrom?.value || ""),
+      to: getDateInputTimestamp(galleryDateTo?.value || "", true),
+      sort: gallerySortOrder?.value === "asc" ? "asc" : "desc"
+    };
+  }
+
+  function getEventGalleryItems(options = {}) {
+    const from = Number(options.from || 0);
+    const to = Number(options.to || 0);
+    const sort = options.sort === "asc" ? "asc" : "desc";
+    const hasDateRange = Boolean(from || to);
     return getNotices()
       .filter((notice) => notice.image)
       .map((notice, index) => ({ ...notice, index, timestamp: parseEventDate(notice.date) }))
-      .sort((a, b) => b.timestamp - a.timestamp || b.index - a.index);
+      .filter((item) => {
+        if (!hasDateRange) return true;
+        if (!item.timestamp) return false;
+        if (from && item.timestamp < from) return false;
+        if (to && item.timestamp > to) return false;
+        return true;
+      })
+      .sort((a, b) => {
+        const dateDiff = sort === "asc" ? a.timestamp - b.timestamp : b.timestamp - a.timestamp;
+        return dateDiff || (sort === "asc" ? a.index - b.index : b.index - a.index);
+      });
   }
 
   function renderGalleryModeTabs() {
     galleryModeTabs.forEach((button) => {
       button.classList.toggle("active", button.dataset.galleryMode === currentGalleryMode);
     });
-    if (galleryFilterPanel) galleryFilterPanel.hidden = currentGalleryMode !== "products";
+    renderGalleryFilters();
   }
 
   function renderProducts(category = currentCategory) {
@@ -677,12 +717,19 @@
 
     if (!products.length) {
       productGrid.innerHTML = `<div class="empty-state"><strong>${escapeHtml(t("empty_products_title"))}</strong><span>${escapeHtml(t("empty_products_copy"))}</span></div>`;
+      renderProductPagination(0);
       return;
     }
 
+    const totalProducts = products.length;
+    const totalPages = Math.max(1, Math.ceil(totalProducts / productPageSize));
+    currentProductPage = Math.min(Math.max(1, currentProductPage), totalPages);
+    const pageStart = (currentProductPage - 1) * productPageSize;
+    const pageEnd = Math.min(pageStart + productPageSize, totalProducts);
+    const pageProducts = products.slice(pageStart, pageEnd);
     const whatsappNumber = getWhatsAppNumber();
 
-    productGrid.innerHTML = products.map((product) => {
+    productGrid.innerHTML = pageProducts.map((product) => {
       const productIndex = allProducts.indexOf(product);
       const primaryMedia = getPrimaryProductMedia(product);
       const mediaCount = getProductMedia(product).length;
@@ -711,18 +758,55 @@
         </article>
       `;
     }).join("");
+    renderProductPagination(totalProducts, pageStart + 1, pageEnd, totalPages);
+  }
+
+  function formatProductPageStatus(start, end, total) {
+    return t("products_page_status")
+      .replace("{start}", String(start))
+      .replace("{end}", String(end))
+      .replace("{total}", String(total));
+  }
+
+  function renderProductPagination(totalProducts, start = 0, end = 0, totalPages = 1) {
+    if (!productPagination) return;
+    if (!totalProducts) {
+      productPagination.innerHTML = "";
+      return;
+    }
+
+    productPagination.innerHTML = `
+      <div class="pagination-status">${escapeHtml(formatProductPageStatus(start, end, totalProducts))}</div>
+      <label class="page-size-control">
+        <span>${escapeHtml(t("products_per_page"))}</span>
+        <select id="product-page-size">
+          ${[20, 30, 50].map((size) => `<option value="${size}" ${size === productPageSize ? "selected" : ""}>${size}</option>`).join("")}
+        </select>
+      </label>
+      <div class="pagination-buttons">
+        <button type="button" data-product-page="prev" ${currentProductPage <= 1 ? "disabled" : ""}>${escapeHtml(t("products_prev"))}</button>
+        <label class="page-number-control">
+          <select id="product-page-number" aria-label="${escapeHtml(t("products_page_number"))}">
+            ${Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => `<option value="${page}" ${page === currentProductPage ? "selected" : ""}>${page}</option>`).join("")}
+          </select>
+          <span>/ ${totalPages}</span>
+        </label>
+        <button type="button" data-product-page="next" ${currentProductPage >= totalPages ? "disabled" : ""}>${escapeHtml(t("products_next"))}</button>
+      </div>
+    `;
   }
 
   function renderProductGallery() {
     if (!productGallery) return;
 
-    if (currentGalleryMode === "events") {
-      const eventItems = getEventGalleryItems();
+    if (currentGalleryMode === "events" || currentGalleryMode === "activities") {
+      const isActivityGallery = currentGalleryMode === "activities";
+      const eventItems = getEventGalleryItems(isActivityGallery ? getActivityDateFilters() : {});
       if (!eventItems.length) {
         productGallery.innerHTML = `
           <div class="empty-gallery">
-            <strong>${escapeHtml(t("no_event_title"))}</strong>
-            <span>${escapeHtml(t("no_event_copy"))}</span>
+            <strong>${escapeHtml(t(isActivityGallery ? "no_activity_title" : "no_event_title"))}</strong>
+            <span>${escapeHtml(t(isActivityGallery ? "no_activity_copy" : "no_event_copy"))}</span>
           </div>
         `;
         return;
@@ -736,7 +820,7 @@
       }, new Map());
 
       productGallery.innerHTML = [...groups.entries()].map(([date, items]) => `
-        <section class="gallery-group event-gallery-group" aria-label="${escapeHtml(date)} shop event gallery">
+        <section class="gallery-group event-gallery-group" aria-label="${escapeHtml(date)} ${escapeHtml(isActivityGallery ? "shop gallery" : "shop event gallery")}">
           <h3>${escapeHtml(date)}</h3>
           <p class="gallery-group-meta">${items.length} ${escapeHtml(t(items.length > 1 ? "event_count_plural" : "event_count"))}</p>
           <div class="gallery-grid">
@@ -756,46 +840,6 @@
       `).join("");
       return;
     }
-
-    const allProducts = getProducts();
-    let productsWithImages = allProducts.filter(isProductVisible).filter((product) => getProductMedia(product).length);
-
-    if (activeGalleryCategories.size) {
-      productsWithImages = productsWithImages.filter((product) => activeGalleryCategories.has(product.category));
-    }
-
-    if (!productsWithImages.length) {
-      productGallery.innerHTML = `
-        <div class="empty-gallery">
-          <strong>${escapeHtml(t("no_product_photo_title"))}</strong>
-          <span>${escapeHtml(t("no_product_photo_copy"))}</span>
-        </div>
-      `;
-      return;
-    }
-
-    productGallery.innerHTML = productsWithImages.map((product) => `
-      <section class="gallery-group" aria-label="${escapeHtml(product.name)} gallery">
-        <h3>${escapeHtml(product.name)}</h3>
-        <p class="gallery-group-meta">${escapeHtml(categoryLabel(product.category))}  ${escapeHtml(product.status)}  ${escapeHtml(product.tag)}</p>
-        <div class="gallery-grid">
-          ${getProductMedia(product).map((item, index) => `
-            <article class="gallery-item">
-              <button class="gallery-media-button media-trigger" type="button" data-product-index="${allProducts.indexOf(product)}" data-media-index="${index}" aria-label="View ${escapeHtml(product.name)} media ${index + 1}">
-                ${item.type === "video"
-                  ? `<video src="${escapeHtml(item.src)}" muted playsinline></video><span class="media-type-badge">${escapeHtml(t("video"))}</span>`
-                  : `<img src="${escapeHtml(item.src)}" alt="${escapeHtml(product.name)} photo ${index + 1}" loading="lazy" decoding="async">`
-                }
-              </button>
-              <div>
-                <strong>${escapeHtml(product.name)}</strong>
-                <span>${escapeHtml(item.type === "video" ? t("video") : t("photo"))} ${index + 1}</span>
-              </div>
-            </article>
-          `).join("")}
-        </div>
-      </section>
-    `).join("");
   }
 
   function renderFilters() {
@@ -822,16 +866,41 @@
       const button = event.target.closest("button");
       if (!button) return;
       currentCategory = button.dataset.category;
+      currentProductPage = 1;
       renderFilters();
       renderProducts(currentCategory);
     });
   }
 
+  function setupProductPagination() {
+    if (!productPagination) return;
+    productPagination.addEventListener("change", (event) => {
+      const select = event.target.closest("#product-page-size");
+      const pageSelect = event.target.closest("#product-page-number");
+      if (select) {
+        productPageSize = Number(select.value) || 20;
+        currentProductPage = 1;
+        renderProducts(currentCategory);
+        return;
+      }
+      if (!pageSelect) return;
+      currentProductPage = Number(pageSelect.value) || 1;
+      renderProducts(currentCategory);
+    });
+
+    productPagination.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-product-page]");
+      if (!button || button.disabled) return;
+      currentProductPage += button.dataset.productPage === "next" ? 1 : -1;
+      renderProducts(currentCategory);
+      document.querySelector("#products")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
   function setupGalleryFilters() {
-    if (!galleryFilters) return;
     renderGalleryFilters();
 
-    galleryFilters.addEventListener("click", (event) => {
+    galleryFilters?.addEventListener("click", (event) => {
       const button = event.target.closest("button");
       if (!button) return;
       const category = button.dataset.galleryCategory;
@@ -847,6 +916,10 @@
       renderGalleryFilters();
       renderProductGallery();
     });
+
+    [galleryDateFrom, galleryDateTo, gallerySortOrder].forEach((control) => {
+      control?.addEventListener("change", renderProductGallery);
+    });
   }
 
   function setupGalleryModeTabs() {
@@ -855,7 +928,7 @@
 
     galleryModeTabs.forEach((button) => {
       button.addEventListener("click", () => {
-        currentGalleryMode = button.dataset.galleryMode || "products";
+        currentGalleryMode = button.dataset.galleryMode || "events";
         renderGalleryModeTabs();
         renderProductGallery();
       });
@@ -869,6 +942,7 @@
         if (!category) return;
         currentCategory = category;
         productSearchTerm = "";
+        currentProductPage = 1;
         const search = $("#product-search");
         if (search) search.value = "";
         renderFilters();
@@ -882,6 +956,7 @@
     if (!search) return;
     search.addEventListener("input", () => {
       productSearchTerm = search.value.trim();
+      currentProductPage = 1;
       renderProducts(currentCategory);
     });
   }
@@ -948,8 +1023,9 @@
     document.addEventListener("click", (event) => {
       const trigger = event.target.closest(".media-trigger");
       if (!trigger) return;
-      if (trigger.dataset.eventIndex) {
-        const eventMedia = getEventGalleryItems().map((item) => ({
+      if (trigger.hasAttribute("data-event-index")) {
+        const eventItems = getEventGalleryItems(currentGalleryMode === "activities" ? getActivityDateFilters() : {});
+        const eventMedia = eventItems.map((item) => ({
           type: "image",
           src: item.image,
           alt: `${item.title}  ${item.date}`
@@ -1158,48 +1234,6 @@
     renderNoticeImagePreview();
   }
 
-  function renderComments() {
-    if (!comments) return;
-    comments.innerHTML = data.comments.map((comment) => `
-      <article class="comment-card">
-        <div class="comment-top">
-          <strong>${escapeHtml(comment.name)}</strong>
-          <span>${escapeHtml(comment.date)}</span>
-        </div>
-        <p>${escapeHtml(comment.message)}</p>
-      </article>
-    `).join("");
-  }
-
-  function getStoreEmail() {
-    const email = getContact(getStore(), "Email");
-    const hrefValue = String(email.href || "").replace(/^mailto:/i, "").split("?")[0];
-    return String(hrefValue || email.value || "support@infosmarthardwarehome.com")
-      .trim()
-      .replace(/[\r\n\s]/g, "");
-  }
-
-  function setupCommentForm() {
-    if (!commentForm) return;
-    commentForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const name = $("#comment-name").value.trim();
-      const message = $("#comment-message").value.trim();
-      if (!name || !message) return;
-
-      const subject = encodeURIComponent(`SMART Hardware Home enquiry from ${name}`);
-      const body = encodeURIComponent([
-        `Name: ${name}`,
-        "",
-        "Message:",
-        message,
-        "",
-        `Page: ${window.location.href}`
-      ].join("\n"));
-      window.location.href = `mailto:${getStoreEmail()}?subject=${subject}&body=${body}`;
-    });
-  }
-
   function renderCategoryOptions(categories = getCategories()) {
     const options = $("#category-options");
     if (!options) return;
@@ -1397,6 +1431,7 @@
   setupLanguageSwitcher();
   renderStoreInfo();
   setupProductFilters();
+  setupProductPagination();
   setupGalleryModeTabs();
   setupCategoryShortcuts();
   setupGalleryFilters();
@@ -1404,8 +1439,6 @@
   renderProducts();
   renderProductGallery();
   renderNotices();
-  renderComments();
-  setupCommentForm();
   setupAdmin();
   setupNavigation();
   setupMediaViewer();

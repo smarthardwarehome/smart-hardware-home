@@ -18,7 +18,6 @@
       <a href="#products"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.7 6.3 17 4l3 3-2.3 2.3"/><path d="m14 7 3 3"/><path d="M5 19l8.5-8.5"/><path d="M4 20l-1-1 3-3 1 1-3 3Z"/></svg></span><span data-i18n="nav_products">Products</span></a>
       <a href="#gallery"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg></span><span data-i18n="nav_gallery">Gallery</span></a>
       <a href="#notice"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 10v4h4l9 4V6l-9 4H4Z"/><path d="M19 9c1 1 1 5 0 6"/></svg></span><span data-i18n="nav_updates">Updates</span></a>
-      <a href="#forum"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H8l-3 3V5Z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></span><span data-i18n="nav_forum">Forum</span></a>
       <a href="#contact"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 5h4l1 4-2 1c1 2 2 3 4 4l1-2 4 1v4c0 1-1 2-2 2C10 19 5 14 5 7c0-1 1-2 2-2Z"/></svg></span><span data-i18n="nav_contact">Contact</span></a>
     </nav>
     <div class="header-contact">
@@ -131,23 +130,26 @@
         </div>
       </div>
       <div class="product-grid" id="product-grid"></div>
+      <div class="product-pagination" id="product-pagination" aria-label="Product pagination"></div>
     </section>
 
     <section class="gallery-band" id="gallery">
       <div class="section-heading"><div><p class="eyebrow" data-i18n="gallery_eyebrow">In store</p><h2 data-i18n="gallery_title">Photo gallery</h2></div></div>
-      <div class="gallery-mode-tabs" aria-label="Choose gallery type"><button type="button" class="active" data-gallery-mode="events" data-i18n="gallery_events">Shop events</button><button type="button" data-gallery-mode="products" data-i18n="gallery_products">Product photos</button></div>
-      <div class="gallery-filter-panel" aria-label="Gallery category filter"><div><strong data-i18n="gallery_choose">Choose a category</strong><span data-i18n="gallery_choose_help">Select one, several, or show all</span></div><div class="gallery-filter-bar" id="gallery-category-filters"></div></div>
+      <div class="gallery-mode-tabs" aria-label="Choose gallery type"><button type="button" class="active" data-gallery-mode="events" data-i18n="gallery_events">Shop events</button><button type="button" data-gallery-mode="activities" data-i18n="gallery_activities">Shop Gallery</button></div>
+      <div class="gallery-filter-panel" aria-label="Shop Gallery date filter">
+        <div><strong data-i18n="gallery_date_range">Shop Gallery date range</strong><span data-i18n="gallery_date_range_help">Choose a date range and sort shop gallery photos.</span></div>
+        <div class="gallery-date-controls">
+          <label><span data-i18n="gallery_from">From</span><input type="date" id="gallery-date-from"></label>
+          <label><span data-i18n="gallery_to">To</span><input type="date" id="gallery-date-to"></label>
+          <label><span data-i18n="gallery_sort">Sort</span><select id="gallery-sort-order"><option value="desc" data-i18n="gallery_newest">Newest first</option><option value="asc" data-i18n="gallery_oldest">Oldest first</option></select></label>
+        </div>
+      </div>
       <div class="gallery-groups" id="product-gallery"></div>
     </section>
 
     <section class="notice-band" id="notice">
       <div class="section-heading"><div><p class="eyebrow" data-i18n="updates_eyebrow">Latest</p><h2 data-i18n="updates_title">Store updates</h2></div><a class="text-link" href="#contact" data-i18n="updates_link">Ask about stock</a></div>
       <div class="notice-list" id="notice-list"></div>
-    </section>
-
-    <section class="section two-column" id="forum">
-      <div><p class="eyebrow" data-i18n="forum_eyebrow">Customer forum</p><h2 data-i18n="forum_title">Ask the store</h2><p class="section-copy" data-i18n="forum_copy">Leave a question about products, price, stock or sizes. Your email app will open so you can send it directly to the store.</p></div>
-      <div class="forum-panel"><form class="comment-form" id="comment-form"><label><span data-i18n="form_name">Name</span><input type="text" id="comment-name" name="name" maxlength="40" placeholder="Your name" data-i18n-placeholder="form_name_placeholder" required></label><label><span data-i18n="form_message">Message</span><textarea id="comment-message" name="message" rows="4" maxlength="280" placeholder="What are you looking for?" data-i18n-placeholder="form_message_placeholder" required></textarea></label><button class="button primary" type="submit" data-i18n="form_post">Send email</button></form><div class="comments" id="comments" aria-live="polite"></div></div>
     </section>
 
     <section class="contact-band" id="contact">

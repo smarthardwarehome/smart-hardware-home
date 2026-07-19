@@ -35,9 +35,6 @@ window.SMART_HW_DATA = {
     { date: "Promotion", title: "Looking for hardware tools?", body: "Quality tools, reliable products and practical prices — all in one local store.", image: "assets/hardware-tools-promo.png" },
     { date: "Product help", title: "Ask us about sizes and uses", body: "Send us a photo or product details on WhatsApp and we will help identify a suitable item." },
     { date: "Store updates", title: "New stock and offers", body: "Check this page for new arrivals, promotions and store announcements." }
-  ],
-  comments: [
-    { name: "Store team", date: "Pinned", message: "Send your product question by email using the form above. For a quick reply, WhatsApp or call 018-949 2887." }
   ]
 };
 
